@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using EscolaDev.Entities;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace EscolaDev.Controllers
@@ -30,5 +31,19 @@ namespace EscolaDev.Controllers
                 return Ok(aluno);
             }
         }
+
+        [HttpGet("id")]
+        public async Task<IActionResult> BuscarAlunoporId(int id)
+        {   
+            var parameters = new { id };
+
+            using (var sqlconnection = new SqlConnection(_connectionString)) 
+            {
+                const string sql = "SELECT * FROM Aluno WHERE Id = @id";
+                var aluno = await sqlconnection.QuerySingleOrDefaultAsync<Aluno>(sql, parameters);
+                return Ok(aluno);   
+            }
+        }
     }
 }
+    
