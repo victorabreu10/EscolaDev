@@ -20,7 +20,10 @@ namespace EscolaDev.Controllers
         {
             _connectionString = configuration.GetConnectionString("DataBase");  
         }
-
+        /// <summary>
+        /// Busca todos os alunos existentes
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> BuscarTodosAlunos()
         {
@@ -31,8 +34,12 @@ namespace EscolaDev.Controllers
                 return Ok(aluno);
             }
         }
-
-        [HttpGet("id")]
+        /// <summary>
+        /// Realiza a busca do aluno pelo identificador id 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
         public async Task<IActionResult> BuscarAlunoporId(int id)
         {   
             var parameters = new { id };
@@ -42,6 +49,22 @@ namespace EscolaDev.Controllers
                 const string sql = "SELECT * FROM Aluno WHERE Id = @id";
                 var aluno = await sqlconnection.QuerySingleOrDefaultAsync<Aluno>(sql, parameters);
                 return Ok(aluno);   
+            }
+        }
+
+        [HttpPost("Criar")]
+        public async Task<IActionResult> CriarAluno(Aluno criar)
+        { 
+            var aluno = new Aluno(criar.NomeAluno, criar.DataAniversario, criar.NomeEscola);
+
+            var parameters = new { aluno.NomeAluno, aluno.DataAniversario, aluno.EstaAtivo, aluno.NomeEscola};
+
+            using (var sqlconnection = new SqlConnection(_connectionString))
+            {
+                const string sql = "INSERT INTO dbo.Aluno VALUES (@NomeAluno, @DataAniversario, @EstaAtivo, @NomeEscola)";
+
+                var response = await sqlconnection.ExecuteAsync(sql, parameters);
+                return Ok(parameters);
             }
         }
     }
