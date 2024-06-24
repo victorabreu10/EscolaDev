@@ -82,7 +82,7 @@ namespace EscolaDev.Controllers
         /// <param name="aluno"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<ActionResult> AtualizarAluno(int id, Aluno aluno)
+        public async Task<IActionResult> AtualizarAluno(int id, Aluno aluno)
         {
             var parameters = new {id, aluno.NomeAluno, aluno.DataAniversario, aluno.NomeEscola};
 
@@ -92,6 +92,24 @@ namespace EscolaDev.Controllers
 
                 await sqlconnection.ExecuteAsync(sql, parameters);
                 return Ok(parameters);
+            }
+        }
+
+        /// <summary>
+        /// Deletar aluno pelo id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletarAluno(int id) 
+        {
+            var parameters = new { id };
+
+            using (var sqlconnection = new SqlConnection(_connectionString))
+            {
+                const string sql = "Delete Aluno WHERE Id = @id";
+                var aluno = await sqlconnection.QuerySingleOrDefaultAsync<Aluno>(sql, parameters);
+                return Ok(aluno);
             }
         }
     }
