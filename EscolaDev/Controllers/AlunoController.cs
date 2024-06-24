@@ -41,7 +41,7 @@ namespace EscolaDev.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("id")]
         public async Task<IActionResult> BuscarAlunoporId(int id)
         {   
             var parameters = new { id };
@@ -81,7 +81,7 @@ namespace EscolaDev.Controllers
         /// <param name="id"></param>
         /// <param name="aluno"></param>
         /// <returns></returns>
-        [HttpPut("{id}")]
+        [HttpPut("Atualizar")]
         public async Task<IActionResult> AtualizarAluno(int id, Aluno aluno)
         {
             var parameters = new {id, aluno.NomeAluno, aluno.DataAniversario, aluno.NomeEscola};
@@ -100,7 +100,7 @@ namespace EscolaDev.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("{id}")]
+        [HttpDelete("Deletar")]
         public async Task<IActionResult> DeletarAluno(int id) 
         {
             var parameters = new { id };
